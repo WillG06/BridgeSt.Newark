@@ -1,81 +1,173 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 const NAV = [
   { to: "/bridge-street", label: "Bridge Street", n: "01" },
-  { to: "/portfolio", label: "Tenancies", n: "02" },
-  { to: "/residences", label: "Residences", n: "03" },
-  { to: "/heritage", label: "Heritage", n: "04" },
-  { to: "/about", label: "About", n: "05" },
-  { to: "/contact", label: "Contact", n: "06" },
+  { to: "/portfolio",     label: "Tenancies",     n: "02" },
+  { to: "/residences",    label: "Residences",    n: "03" },
+  { to: "/heritage",      label: "Heritage",      n: "04" },
+  { to: "/about",         label: "About",         n: "05" },
+  { to: "/contact",       label: "Contact",       n: "06" },
 ] as const;
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen]         = useState(false);
+  const { pathname }            = useLocation();
+
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    const onScroll = () => setScrolled(window.scrollY > 32);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => { setOpen(false); }, [pathname]);
+
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-[backdrop-filter,background-color,border-color,color] duration-500 ${
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
         scrolled
-          ? "border-b border-border bg-background/85 backdrop-blur-xl text-foreground"
-          : "border-b border-transparent text-white mix-blend-difference"
+          ? "bg-[#F5F0E8] border-b border-[#B8965A]/20"
+          : "bg-transparent border-b border-white/10"
       }`}
     >
-      <div className="grid grid-cols-12 items-center gap-4 px-6 py-5 md:px-10">
-        <Link to="/" className="col-span-6 md:col-span-3 flex items-baseline gap-2">
-          <span className="font-display text-xl tracking-tight">Porter &amp; Bridge</span>
-          <span className="font-serif-i opacity-60 text-xs">est. 1893</span>
+      {/* ── Desktop ── */}
+      <div className="hidden md:grid grid-cols-[1fr_auto_1fr] items-center px-10 h-16">
+
+        <Link to="/" className="flex flex-col gap-[3px]">
+          <span
+            className={`font-display text-[17px] tracking-[0.08em] leading-none transition-all duration-500 ${
+              scrolled
+                ? "text-[#1a1714] font-normal"
+                : "text-[#F5F0E8] font-light [text-shadow:0_1px_12px_rgba(0,0,0,0.65)]"
+            }`}
+          >
+            Porter &amp; Bridge
+          </span>
+          <span
+            className={`font-serif-i text-[10px] tracking-[0.22em] leading-none transition-all duration-500 ${
+              scrolled ? "text-[#B8965A]/80" : "text-[#B8965A]/75 [text-shadow:0_1px_8px_rgba(0,0,0,0.5)]"
+            }`}
+          >
+            est. 1893
+          </span>
         </Link>
 
-        <nav className="hidden md:col-span-7 md:flex items-center gap-6 text-sm">
+        <nav className="flex items-center gap-8">
           {NAV.map((n) => (
             <Link
               key={n.to}
               to={n.to}
-              className="link tracking-wide transition-colors duration-500"
+              className={`relative text-[11px] tracking-[0.2em] uppercase font-light transition-all duration-300 group ${
+                scrolled
+                  ? pathname === n.to
+                    ? "text-[#1a1714]"
+                    : "text-[#1a1714]/45 hover:text-[#4a5c3f]"
+                  : pathname === n.to
+                    ? "text-[#F5F0E8]"
+                    : "text-[#F5F0E8]/75 hover:text-[#8a9e74] [text-shadow:0_1px_8px_rgba(0,0,0,0.5)]"
+              }`}
             >
-              <span className="font-serif-i text-[10px] mr-1.5 align-top opacity-70">{n.n}</span>
               {n.label}
+              <span
+                className={`absolute -bottom-[2px] left-0 h-[0.5px] bg-[#4a5c3f] transition-all duration-500 ease-out ${
+                  pathname === n.to ? "w-full" : "w-0 group-hover:w-full"
+                }`}
+              />
             </Link>
           ))}
         </nav>
 
-        <div className="col-span-6 md:col-span-2 flex justify-end">
-          <Link to="/contact" className="hidden md:inline-block link text-xs tracking-[0.22em] uppercase">
-            Enquire →
-          </Link>
-          <button
-            onClick={() => setOpen((o) => !o)}
-            className="md:hidden text-xs tracking-[0.22em] uppercase"
-            aria-label="Toggle menu"
-          >
-            {open ? "Close" : "Menu"}
-          </button>
+        <div className="flex justify-end">
+          {scrolled ? (
+            <Link
+              to="/contact"
+              className="flex items-center gap-2.5 bg-[#1a1714] px-5 py-[9px] transition-colors duration-300 hover:bg-[#2d2820]"
+            >
+              <span className="w-[5px] h-[5px] rounded-full bg-[#B8965A] flex-shrink-0" />
+              <span className="text-[10px] tracking-[0.26em] uppercase text-[#F5F0E8] font-light">
+                Enquire
+              </span>
+            </Link>
+          ) : (
+            <Link
+              to="/contact"
+              className="text-[10px] tracking-[0.26em] uppercase text-[#F5F0E8] font-light bg-white/10 border border-white/30 px-5 py-[9px] backdrop-blur-sm transition-all duration-300 hover:bg-white/18 hover:border-white/50 [text-shadow:0_1px_8px_rgba(0,0,0,0.4)]"
+            >
+              Enquire
+            </Link>
+          )}
         </div>
       </div>
 
+      {/* ── Mobile bar ── */}
+      <div
+        className={`md:hidden flex items-center justify-between px-6 h-14 transition-all duration-500 ${
+          open ? "bg-[#0f0e0c] border-b border-[#B8965A]/15" : ""
+        }`}
+      >
+        <Link to="/" className="flex flex-col gap-[3px]">
+          <span
+            className={`font-display text-[15px] tracking-[0.07em] leading-none transition-all duration-500 ${
+              scrolled || open
+                ? "text-[#F5F0E8]"
+                : "text-[#F5F0E8] [text-shadow:0_1px_10px_rgba(0,0,0,0.6)]"
+            }`}
+          >
+            Porter &amp; Bridge
+          </span>
+          <span className="font-serif-i text-[9px] tracking-[0.2em] text-[#B8965A]/65 leading-none">
+            est. 1893
+          </span>
+        </Link>
+
+        <button
+          onClick={() => setOpen((o) => !o)}
+          className={`text-[9px] tracking-[0.26em] uppercase font-light transition-colors duration-300 ${
+            open ? "text-[#B8965A]" : "text-[#F5F0E8]/70"
+          }`}
+          aria-label="Toggle menu"
+        >
+          {open ? "Close" : "Menu"}
+        </button>
+      </div>
+
+      {/* ── Mobile drawer ── */}
       {open && (
-        <div className="md:hidden border-t border-border bg-background text-foreground">
-          <div className="flex flex-col px-6 py-6 gap-5">
+        <div className="md:hidden bg-[#0f0e0c]">
+          <nav className="flex flex-col px-6 pt-2 pb-4">
             {NAV.map((n) => (
               <Link
                 key={n.to}
                 to={n.to}
-                onClick={() => setOpen(false)}
-                className="flex items-baseline justify-between"
+                className={`flex items-baseline justify-between py-[14px] border-b border-white/[0.06] last:border-none group transition-colors duration-300 ${
+                  pathname === n.to ? "text-[#8a9e74]" : "text-[#F5F0E8] hover:text-[#8a9e74]"
+                }`}
               >
-                <span className="font-display text-2xl">{n.label}</span>
-                <span className="font-serif-i text-xs opacity-60">{n.n}</span>
+                <span className="font-display text-[26px] font-light leading-none transition-colors duration-300">
+                  {n.label}
+                </span>
+                <span className="text-[9px] tracking-[0.2em] text-[#B8965A]/50 font-light">
+                  {n.n}
+                </span>
               </Link>
             ))}
+          </nav>
+          <div className="px-6 pb-6 pt-2">
+            <Link
+              to="/contact"
+              className="flex items-center justify-center gap-3 bg-[#1a1714] py-3 w-full hover:bg-[#2d2820] transition-colors duration-300"
+            >
+              <span className="w-[5px] h-[5px] rounded-full bg-[#B8965A]" />
+              <span className="text-[10px] tracking-[0.26em] uppercase text-[#F5F0E8] font-light">
+                Enquire
+              </span>
+            </Link>
           </div>
+          <p className="px-6 pb-6 text-[9px] tracking-[0.2em] uppercase text-white/15 font-light">
+            Newark on Trent · Est. 1893
+          </p>
         </div>
       )}
     </header>
