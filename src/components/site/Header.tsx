@@ -10,10 +10,14 @@ const NAV = [
   { to: "/contact",       label: "Contact",       n: "06" },
 ] as const;
 
+const LIGHT_HERO_PAGES = ["/portfolio", "/heritage", "/about", "/contact"];
+
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen]         = useState(false);
   const { pathname }            = useLocation();
+
+  const isDark = scrolled || LIGHT_HERO_PAGES.includes(pathname);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 32);
@@ -27,29 +31,22 @@ export function Header() {
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
-        scrolled
+        isDark
           ? "bg-[#F5F0E8] border-b border-[#B8965A]/20"
           : "bg-transparent border-b border-white/10"
       }`}
     >
       {/* ── Desktop ── */}
       <div className="hidden md:grid grid-cols-[1fr_auto_1fr] items-center px-10 h-16">
-
         <Link to="/" className="flex flex-col gap-[3px]">
-          <span
-            className={`font-display text-[17px] tracking-[0.08em] leading-none transition-all duration-500 ${
-              scrolled
-                ? "text-[#1a1714] font-normal"
-                : "text-[#F5F0E8] font-light [text-shadow:0_1px_12px_rgba(0,0,0,0.65)]"
-            }`}
-          >
+          <span className={`font-display text-[17px] tracking-[0.08em] leading-none transition-all duration-500 ${
+            isDark ? "text-[#1a1714] font-normal" : "text-[#F5F0E8] font-light [text-shadow:0_1px_12px_rgba(0,0,0,0.65)]"
+          }`}>
             Porter &amp; Bridge
           </span>
-          <span
-            className={`font-serif-i text-[10px] tracking-[0.22em] leading-none transition-all duration-500 ${
-              scrolled ? "text-[#B8965A]/80" : "text-[#B8965A]/75 [text-shadow:0_1px_8px_rgba(0,0,0,0.5)]"
-            }`}
-          >
+          <span className={`font-serif-i text-[10px] tracking-[0.22em] leading-none transition-all duration-500 ${
+            isDark ? "text-[#B8965A]/80" : "text-[#B8965A]/75 [text-shadow:0_1px_8px_rgba(0,0,0,0.5)]"
+          }`}>
             est. 1893
           </span>
         </Link>
@@ -60,35 +57,27 @@ export function Header() {
               key={n.to}
               to={n.to}
               className={`relative text-[11px] tracking-[0.2em] uppercase font-light transition-all duration-300 group ${
-                scrolled
-                  ? pathname === n.to
-                    ? "text-[#1a1714]"
-                    : "text-[#1a1714]/45 hover:text-[#4a5c3f]"
-                  : pathname === n.to
-                    ? "text-[#F5F0E8]"
-                    : "text-[#F5F0E8]/75 hover:text-[#8a9e74] [text-shadow:0_1px_8px_rgba(0,0,0,0.5)]"
+                isDark
+                  ? pathname === n.to ? "text-[#1a1714]" : "text-[#1a1714]/45 hover:text-[#4a5c3f]"
+                  : pathname === n.to ? "text-[#F5F0E8]" : "text-[#F5F0E8]/75 hover:text-[#8a9e74] [text-shadow:0_1px_8px_rgba(0,0,0,0.5)]"
               }`}
             >
               {n.label}
-              <span
-                className={`absolute -bottom-[2px] left-0 h-[0.5px] bg-[#4a5c3f] transition-all duration-500 ease-out ${
-                  pathname === n.to ? "w-full" : "w-0 group-hover:w-full"
-                }`}
-              />
+              <span className={`absolute -bottom-[2px] left-0 h-[0.5px] bg-[#4a5c3f] transition-all duration-500 ease-out ${
+                pathname === n.to ? "w-full" : "w-0 group-hover:w-full"
+              }`} />
             </Link>
           ))}
         </nav>
 
         <div className="flex justify-end">
-          {scrolled ? (
+          {isDark ? (
             <Link
               to="/contact"
               className="flex items-center gap-2.5 bg-[#1a1714] px-5 py-[9px] transition-colors duration-300 hover:bg-[#2d2820]"
             >
               <span className="w-[5px] h-[5px] rounded-full bg-[#B8965A] flex-shrink-0" />
-              <span className="text-[10px] tracking-[0.26em] uppercase text-[#F5F0E8] font-light">
-                Enquire
-              </span>
+              <span className="text-[10px] tracking-[0.26em] uppercase text-[#F5F0E8] font-light">Enquire</span>
             </Link>
           ) : (
             <Link
@@ -102,34 +91,41 @@ export function Header() {
       </div>
 
       {/* ── Mobile bar ── */}
-      <div
-        className={`md:hidden flex items-center justify-between px-6 h-14 transition-all duration-500 ${
-          open ? "bg-[#0f0e0c] border-b border-[#B8965A]/15" : ""
-        }`}
-      >
+      <div className={`md:hidden flex items-center justify-between px-6 h-14 transition-all duration-500 ${
+        open
+          ? "bg-[#0f0e0c] border-b border-[#B8965A]/15"
+          : isDark
+            ? "bg-[#F5F0E8] border-b border-[#B8965A]/20"
+            : ""
+      }`}>
         <Link to="/" className="flex flex-col gap-[3px]">
-          <span
-            className={`font-display text-[15px] tracking-[0.07em] leading-none transition-all duration-500 ${
-              scrolled || open
-                ? "text-[#F5F0E8]"
-                : "text-[#F5F0E8] [text-shadow:0_1px_10px_rgba(0,0,0,0.6)]"
-            }`}
-          >
+          <span className={`font-display text-[15px] tracking-[0.07em] leading-none transition-all duration-500 ${
+            open ? "text-[#F5F0E8]" : isDark ? "text-[#1a1714]" : "text-[#F5F0E8] [text-shadow:0_1px_10px_rgba(0,0,0,0.6)]"
+          }`}>
             Porter &amp; Bridge
           </span>
-          <span className="font-serif-i text-[9px] tracking-[0.2em] text-[#B8965A]/65 leading-none">
+          <span className={`font-serif-i text-[9px] tracking-[0.2em] leading-none transition-all duration-500 ${
+            open ? "text-[#B8965A]/65" : isDark ? "text-[#B8965A]/80" : "text-[#B8965A]/65"
+          }`}>
             est. 1893
           </span>
         </Link>
 
         <button
           onClick={() => setOpen((o) => !o)}
-          className={`text-[9px] tracking-[0.26em] uppercase font-light transition-colors duration-300 ${
-            open ? "text-[#B8965A]" : "text-[#F5F0E8]/70"
-          }`}
+          className="flex flex-col justify-center items-center w-8 h-8 gap-0 relative"
           aria-label="Toggle menu"
         >
-          {open ? "Close" : "Menu"}
+          <span className={`block h-[0.5px] w-5 transition-all duration-300 ease-in-out origin-center ${
+            open ? "rotate-45 translate-y-[0.5px] bg-[#B8965A]"
+            : isDark ? "translate-y-[-3px] bg-[#1a1714]/60"
+            : "translate-y-[-3px] bg-[#F5F0E8]/70"
+          }`} />
+          <span className={`block h-[0.5px] w-5 transition-all duration-300 ease-in-out origin-center ${
+            open ? "-rotate-45 -translate-y-[0.5px] bg-[#B8965A]"
+            : isDark ? "translate-y-[3px] bg-[#1a1714]/60"
+            : "translate-y-[3px] bg-[#F5F0E8]/70"
+          }`} />
         </button>
       </div>
 
@@ -141,16 +137,12 @@ export function Header() {
               <Link
                 key={n.to}
                 to={n.to}
-                className={`flex items-baseline justify-between py-[14px] border-b border-white/[0.06] last:border-none group transition-colors duration-300 ${
+                className={`flex items-baseline justify-between py-[14px] border-b border-white/[0.06] last:border-none transition-colors duration-300 ${
                   pathname === n.to ? "text-[#8a9e74]" : "text-[#F5F0E8] hover:text-[#8a9e74]"
                 }`}
               >
-                <span className="font-display text-[26px] font-light leading-none transition-colors duration-300">
-                  {n.label}
-                </span>
-                <span className="text-[9px] tracking-[0.2em] text-[#B8965A]/50 font-light">
-                  {n.n}
-                </span>
+                <span className="font-display text-[26px] font-light leading-none transition-colors duration-300">{n.label}</span>
+                <span className="text-[9px] tracking-[0.2em] text-[#B8965A]/50 font-light">{n.n}</span>
               </Link>
             ))}
           </nav>
@@ -160,9 +152,7 @@ export function Header() {
               className="flex items-center justify-center gap-3 bg-[#1a1714] py-3 w-full hover:bg-[#2d2820] transition-colors duration-300"
             >
               <span className="w-[5px] h-[5px] rounded-full bg-[#B8965A]" />
-              <span className="text-[10px] tracking-[0.26em] uppercase text-[#F5F0E8] font-light">
-                Enquire
-              </span>
+              <span className="text-[10px] tracking-[0.26em] uppercase text-[#F5F0E8] font-light">Enquire</span>
             </Link>
           </div>
           <p className="px-6 pb-6 text-[9px] tracking-[0.2em] uppercase text-white/15 font-light">

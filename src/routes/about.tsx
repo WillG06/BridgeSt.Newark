@@ -42,13 +42,21 @@ export default function About() {
         </div>
       </section>
 
-      {/* WIDE IMAGE */}
-      <Reveal className="image-reveal mt-24 md:mt-32 block">
-        <img src={square} alt="Newark on Trent market square at dusk" loading="lazy" width={1920} height={1080} className="w-full h-[60vh] md:h-[80vh] object-cover" />
-      </Reveal>
+      {/* FULL BLEED IMAGE SECTION — fades out at bottom */}
+      <div className="relative mt-24 md:mt-32 h-[80vh] overflow-hidden">
+        <img
+          src={square}
+          alt="Newark on Trent market square at dusk"
+          loading="lazy"
+          width={1920}
+          height={1080}
+          className="w-full h-full object-cover opacity-40"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-transparent to-background" />
+      </div>
 
-      {/* PRINCIPLES */}
-      <section className="mt-32 px-6 md:px-10 grid grid-cols-12 gap-6">
+      {/* PRINCIPLES — overlaps image via negative margin */}
+      <section className="relative z-10 -mt-32 px-6 md:px-10 grid grid-cols-12 gap-6">
         <div className="col-span-12 md:col-span-3">
           <p className="eyebrow">The house, in principle</p>
           <p className="mt-4 font-serif-i text-foreground/70 leading-[1.6] max-w-[26ch]">
@@ -116,7 +124,7 @@ export default function About() {
         </div>
       </section>
 
-      <section className="mt-40 px-6 md:px-10 border-t border-border pt-10">
+      <section className="mt-40 px-6 md:px-10 border-t border-border pt-10 pb-32">
         <div className="grid grid-cols-12 items-end gap-6">
           <p className="col-span-12 md:col-span-3 eyebrow">Continue</p>
           <Link to="/contact" className="col-span-12 md:col-span-9 group block">
