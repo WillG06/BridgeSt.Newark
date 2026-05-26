@@ -15,28 +15,35 @@ const queryClient = new QueryClient();
 
 function ScrollToTop() {
   const { pathname } = useLocation();
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
+  useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
   return null;
+}
+
+function AppRoutes() {
+  const location = useLocation();
+  return (
+    <>
+      <ScrollToTop />
+      <Routes location={location} key={location.pathname}>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/bridge-street" element={<BridgeStreet />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/heritage" element={<Heritage />} />
+        <Route path="/portfolio" element={<Portfolio />} />
+        <Route path="/pricing" element={<Pricing />} />
+        <Route path="/residences" element={<Residences />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </>
+  );
 }
 
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <HashRouter>
-        <ScrollToTop />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/bridge-street" element={<BridgeStreet />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/heritage" element={<Heritage />} />
-          <Route path="/portfolio" element={<Portfolio />} />
-          <Route path="/pricing" element={<Pricing />} />
-          <Route path="/residences" element={<Residences />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <AppRoutes />
       </HashRouter>
     </QueryClientProvider>
   );

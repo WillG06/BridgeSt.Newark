@@ -12,7 +12,7 @@ export function Footer() {
 
         <div className="col-span-6 md:col-span-2 md:col-start-8 space-y-3 text-sm text-parchment">
           <p className="eyebrow">Visit</p>
-          <p>1–9 Bridge Street<br/>27 &amp; 29 Market Place<br/>Newark on Trent NG24</p>
+          <p>1–9 Bridge Street<br />27 &amp; 29 Market Place<br />Newark on Trent NG24</p>
         </div>
 
         <div className="col-span-6 md:col-span-3 space-y-3 text-sm text-parchment">
@@ -23,11 +23,18 @@ export function Footer() {
       </div>
 
       <div className="overflow-hidden border-y border-border py-8">
-        <div className="marquee-track flex whitespace-nowrap font-display text-[12vw] leading-none text-parchment/90">
-          <span className="px-8">Porter &amp; Bridge —</span>
-          <span className="px-8 font-serif-i text-brass">Fugitive Pieces, 1806 —</span>
-          <span className="px-8">Bridge Street, Newark —</span>
-          <span className="px-8 font-serif-i text-brass">Held since 1893 —</span>
+        <div
+          className="marquee-track flex whitespace-nowrap font-display text-[12vw] leading-none text-parchment/90"
+          style={{ animationDuration: "12s" }}
+        >
+          {[0, 1].map((i) => (
+            <span key={i} className="flex shrink-0">
+              <span className="px-8">Porter &amp; Bridge —</span>
+              <span className="px-8 font-serif-i text-brass">Fugitive Pieces, 1806 —</span>
+              <span className="px-8">Bridge Street, Newark —</span>
+              <span className="px-8 font-serif-i text-brass">Held since 1893 —</span>
+            </span>
+          ))}
         </div>
       </div>
 
