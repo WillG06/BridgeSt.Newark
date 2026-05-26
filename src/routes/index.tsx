@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { Layout } from "@/components/site/Layout";
 import { Reveal } from "@/components/site/Reveal";
@@ -21,35 +22,75 @@ import barber2 from "@/assets/shop-barber-2.jpg";
 import byronBook from "@/assets/byron-book.jpg";
 
 export default function Home() {
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const line1Ref = useRef<HTMLSpanElement>(null);
+  const line2Ref = useRef<HTMLSpanElement>(null);
+  // Hidden clones for accurate measurement (no SplitWords spans in the way)
+  const mFullRef = useRef<HTMLSpanElement>(null); // "Bridge St. Newark."
+  const mLine1Ref = useRef<HTMLSpanElement>(null); // "Bridge St."
+  const mLine2Ref = useRef<HTMLSpanElement>(null); // "Newark."
+
+  useEffect(() => {
+    const fit = () => {
+      const title = titleRef.current;
+      const l1 = line1Ref.current;
+      const l2 = line2Ref.current;
+      const mF = mFullRef.current;
+      const mL1 = mLine1Ref.current;
+      const mL2 = mLine2Ref.current;
+      if (!title || !l1 || !l2 || !mF || !mL1 || !mL2) return;
+
+      const BASE = 100;
+      mF.style.fontSize = `${BASE}px`;
+      mL1.style.fontSize = `${BASE}px`;
+      mL2.style.fontSize = `${BASE}px`;
+
+      const isMd = window.innerWidth >= 768;
+      const sidePad = isMd ? 40 : 24; // px-10 = 40px/side, px-6 = 24px/side
+      const avail = window.innerWidth - sidePad * 2;
+
+      if (isMd) {
+        // Desktop: one line
+        title.style.fontSize = `${(avail / mF.scrollWidth) * BASE}px`;
+        l1.style.fontSize = "";
+        l2.style.fontSize = "";
+      } else {
+        // Mobile: two lines, each fills width independently
+        title.style.fontSize = "";
+        l1.style.fontSize = `${(avail / mL1.scrollWidth) * BASE}px`;
+        l2.style.fontSize = `${(avail / mL2.scrollWidth) * BASE}px`;
+      }
+    };
+
+    setTimeout(fit, 50);
+    window.addEventListener("resize", fit);
+    return () => window.removeEventListener("resize", fit);
+  }, []);
+
   return (
     <Layout>
+
+      {/* ── Hidden measurement clones (never visible) ── */}
+      <span ref={mFullRef} aria-hidden className="font-display fixed top-0 left-0 opacity-0 pointer-events-none whitespace-nowrap" style={{ zIndex: -1 }}>Bridge St. Newark.</span>
+      <span ref={mLine1Ref} aria-hidden className="font-display fixed top-0 left-0 opacity-0 pointer-events-none whitespace-nowrap" style={{ zIndex: -1 }}>Bridge St.</span>
+      <span ref={mLine2Ref} aria-hidden className="font-display font-serif-i fixed top-0 left-0 opacity-0 pointer-events-none whitespace-nowrap" style={{ zIndex: -1 }}>Newark.</span>
+
       {/* HERO */}
       <section className="sticky top-0 dark-section h-[100svh] -mt-24 overflow-hidden">
         <HeroRotator images={[hero1, hero3, hero2]} />
-        <div className="relative z-10 h-full flex flex-col justify-end pb-[14vh] px-6 md:px-10">
-          <div className="grid grid-cols-12 gap-6 items-end">
-            <div className="col-span-12 md:col-span-9">
-              <SplitWords as="p" className="eyebrow text-brass mb-8" stagger={40}>
-                Newark on Trent · Est. 1893
-              </SplitWords>
-              <h1 className="font-display text-[14vw] md:text-[10vw] leading-[0.88] text-parchment tracking-tight">
-                <SplitWords as="span" stagger={110}>Bridge St.</SplitWords>
-                <br />
-                <SplitWords as="span" delay={500} stagger={120} className="font-serif-i text-brass">Newark.</SplitWords>
-              </h1>
-            </div>
-            <div className="col-span-12 md:col-span-3 md:pb-3">
-              <SplitWords as="p" delay={1100} stagger={35} className="font-serif-i text-parchment/80 leading-[1.7] max-w-[36ch]">
-                Five tenancies on the ground floor. Six residences above. One literary footnote.
-              </SplitWords>
-              <Link to="/bridge-street" className="link mt-8 inline-block text-xs tracking-[0.24em] uppercase text-brass">
-                Walk the street →
-              </Link>
-            </div>
-          </div>
-        </div>
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 text-parchment/60 text-[10px] tracking-[0.4em] uppercase">
-          Scroll
+        <div className="absolute inset-0 z-10 overflow-hidden">
+          <h1
+            ref={titleRef}
+            className="absolute bottom-8 left-0 font-display text-parchment px-6 md:px-10"
+            style={{ lineHeight: 0.85 }}
+          >
+            <span ref={line1Ref} className="block md:inline whitespace-nowrap">
+              <SplitWords as="span" stagger={80}>Bridge St. </SplitWords>
+            </span>
+            <span ref={line2Ref} className="block md:inline whitespace-nowrap font-serif-i text-brass">
+              <SplitWords as="span" delay={300} stagger={90}>Newark.</SplitWords>
+            </span>
+          </h1>
         </div>
       </section>
 
