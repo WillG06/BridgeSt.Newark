@@ -3,12 +3,12 @@ import { useEffect, useState } from "react";
 
 const NAV = [
   { to: "/",         label: "Home",          n: "00" },
-  { to: "/bridge-street", label: "Bridge Street", n: "01" },
-  { to: "/portfolio",     label: "Tenancies",     n: "02" },
-  { to: "/residences",    label: "Residences",    n: "03" },
-  { to: "/heritage",      label: "Heritage",      n: "04" },
-  { to: "/about",         label: "About",         n: "05" },
-  { to: "/contact",       label: "Contact",       n: "06" },
+  //{ to: "/bridge-street", label: "Bridge Street", n: "01" },
+  { to: "/portfolio",     label: "Tenancies",     n: "01" },
+  { to: "/residences",    label: "Residences",    n: "02" },
+  //{ to: "/heritage",      label: "Heritage",      n: "04" },
+  { to: "/about",         label: "About",         n: "03" },
+  { to: "/contact",       label: "Contact",       n: "04" },
 ] as const;
 
 const LIGHT_HERO_PAGES = ["/portfolio", "/heritage", "/about", "/contact"];

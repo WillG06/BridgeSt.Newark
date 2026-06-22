@@ -27,9 +27,9 @@ function AppRoutes() {
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
-        <Route path="/bridge-street" element={<BridgeStreet />} />
+        
         <Route path="/contact" element={<Contact />} />
-        <Route path="/heritage" element={<Heritage />} />
+        
         <Route path="/portfolio" element={<Portfolio />} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/residences" element={<Residences />} />

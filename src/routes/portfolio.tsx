@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 import { Layout } from "@/components/site/Layout";
 import { Reveal } from "@/components/site/Reveal";
-import timpson1 from "@/assets/shop-timpson-1.jpg";
-import porter1 from "@/assets/shop-porter-1.jpg";
-import glass1 from "@/assets/shop-glass-1.jpg";
-import cafe1 from "@/assets/shop-cafe-1.jpg";
-import barber1 from "@/assets/shop-barber-1.jpg";
+import timpson1 from "@/assets/Timpsons.jpg";
+import porter1 from "@/assets/GH1.jpg";
+import glass1 from "@/assets/glass2.jpg";
+import cafe1 from "@/assets/HarrysHero.jpg";
+import barber1 from "@/assets/BarberHero.jpeg";
 
 interface Unit {
   no: string;
