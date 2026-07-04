@@ -12,6 +12,9 @@ interface StoreSectionProps {
   hero: string;
   detailA: string;
   detailB: string;
+  heroPosition?: string;
+  detailAPosition?: string;
+  detailBPosition?: string;
   established?: string;
   leaseType?: string;
   floorArea?: string;
@@ -20,6 +23,9 @@ interface StoreSectionProps {
 
 export function StoreSection({
   n, name, italicWord, trade, status, rent, blurb, hero, detailA, detailB,
+  heroPosition = "center",
+  detailAPosition = "center",
+  detailBPosition = "center",
   established, leaseType, floorArea, notes,
 }: StoreSectionProps) {
   const rows = [
@@ -39,13 +45,13 @@ export function StoreSection({
           <img
             src={hero}
             alt={`${name} shopfront on Bridge Street, Newark`}
-            className="h-full w-full object-cover object-center"
+            className="h-full w-full object-cover"
+            style={{ objectPosition: heroPosition }}
             loading="lazy"
             width={1920}
             height={1080}
           />
         </div>
-        {/* Scrim — bottom only, just behind the text */}
         <div className="absolute inset-x-0 bottom-0 h-[60%]" style={{ background: "linear-gradient(to top, rgba(8,6,4,0.88) 0%, rgba(8,6,4,0.4) 50%, transparent 100%)" }} />
 
         <div className="absolute inset-x-0 bottom-[10vh] px-6 md:px-10 scroll-fade-out">
@@ -86,14 +92,12 @@ export function StoreSection({
         </div>
       </div>
 
-      {/* ── DETAILS — true 50 / 50 ──────────────────────────────────── */}
+      {/* ── DETAILS ─────────────────────────────────────────────────── */}
       <div className="bg-background">
         <div className="flex flex-col md:flex-row min-h-[70vh]">
 
-          {/* LEFT HALF — 75% image centred, circle motifs in the gap */}
+          {/* LEFT HALF — detail image A */}
           <div className="relative w-full md:w-1/2 flex-shrink-0 flex items-center justify-center" style={{ minHeight: "560px" }}>
-
-            {/* Hairline circles — architectural notation, bleeding off edges */}
             <svg
               aria-hidden
               className="absolute inset-0 w-full h-full"
@@ -101,9 +105,7 @@ export function StoreSection({
               preserveAspectRatio="xMidYMid meet"
               style={{ pointerEvents: "none", overflow: "hidden" }}
             >
-              {/* Large arc bleeding off bottom-left */}
               <circle cx="2" cy="96" r="42" fill="none" stroke="rgba(245,242,236,0.07)" strokeWidth="0.12" />
-              {/* Medium arc bleeding off top-right */}
               <circle cx="98" cy="4"  r="28" fill="none" stroke="rgba(245,242,236,0.05)" strokeWidth="0.12" />
             </svg>
 
@@ -112,7 +114,10 @@ export function StoreSection({
                 src={detailA}
                 alt={`${name} — detail study`}
                 className="w-full object-cover"
-                style={{ height: "clamp(360px, 55vh, 680px)" }}
+                style={{
+                  height: "clamp(360px, 55vh, 680px)",
+                  objectPosition: detailAPosition,
+                }}
                 loading="lazy"
                 width={1200}
                 height={1600}
@@ -120,10 +125,9 @@ export function StoreSection({
             </Reveal>
           </div>
 
-          {/* RIGHT HALF — info + blurb + second image */}
+          {/* RIGHT HALF — info + blurb + detail image B */}
           <div className="w-full md:w-1/2 flex flex-col justify-between px-8 md:px-14 lg:px-20 py-16 md:py-24 space-y-12">
 
-            {/* Data table */}
             <Reveal>
               <p className="eyebrow mb-8">Unit details</p>
               <div>
@@ -135,31 +139,19 @@ export function StoreSection({
                   >
                     <span
                       className="text-foreground/45"
-                      style={{
-                        fontSize: "0.65rem",
-                        letterSpacing: "0.14em",
-                        textTransform: "uppercase",
-                        fontFamily: "var(--font-body)",
-                      }}
+                      style={{ fontSize: "0.65rem", letterSpacing: "0.14em", textTransform: "uppercase", fontFamily: "var(--font-body)" }}
                     >
                       {k}
                     </span>
                     <span
                       className="text-foreground text-right"
-                      style={{
-                        fontSize: "0.82rem",
-                        fontFamily: "var(--font-body)",
-                        maxWidth: "58%",
-                        lineHeight: 1.4,
-                      }}
+                      style={{ fontSize: "0.82rem", fontFamily: "var(--font-body)", maxWidth: "58%", lineHeight: 1.4 }}
                     >
                       {v}
                     </span>
                   </div>
                 ))}
               </div>
-
-              {/* Status pill */}
               <div className="flex gap-2 pt-6">
                 <span className={`pill ${status === "Let" ? "let" : status === "To Let" ? "tolet" : ""}`}>
                   <span className="dot" /> {status}
@@ -167,7 +159,6 @@ export function StoreSection({
               </div>
             </Reveal>
 
-            {/* Blurb */}
             <Reveal delay={100}>
               <p className="eyebrow mb-4">A note on the tenancy</p>
               <p
@@ -186,13 +177,16 @@ export function StoreSection({
               )}
             </Reveal>
 
-            {/* Second image — sits at the bottom of the right half */}
+            {/* Detail image B — position controlled per-store */}
             <Reveal className="image-reveal" delay={150}>
               <img
                 src={detailB}
                 alt={`${name} — close detail`}
-                className="w-full object-cover object-top"
-                style={{ height: "clamp(200px, 28vh, 340px)" }}
+                className="w-full object-cover"
+                style={{
+                  height: "clamp(200px, 28vh, 340px)",
+                  objectPosition: detailBPosition,
+                }}
                 loading="lazy"
                 width={1200}
                 height={800}

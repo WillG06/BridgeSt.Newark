@@ -3,7 +3,7 @@ import { Layout } from "@/components/site/Layout";
 import { Reveal } from "@/components/site/Reveal";
 import { SplitWords } from "@/components/site/SplitWords";
 import square from "@/assets/market-square.jpg";
-import hero2 from "@/assets/hero-2.jpg";
+import hero1 from "@/assets/Hero1.jpg";
 
 const PRINCIPLES = [
   ["Hold long.", "Capital gain follows from a building well kept, not from the trade in deeds. We hold to the lease cycle, not the quarter."],
@@ -24,39 +24,110 @@ const TIMELINE = [
 export default function About() {
   return (
     <Layout>
-      {/* HEADER */}
-      <section className="px-6 md:px-10 pt-6 grid grid-cols-12 gap-6">
-        <p className="col-span-12 md:col-span-3 eyebrow">№ 05 — On the house</p>
-        <div className="col-span-12 md:col-span-9">
-          <SplitWords as="h1" stagger={90} className="font-display text-5xl md:text-[6vw] leading-[0.95] text-foreground max-w-[18ch]">
-            One building. One freehold.
+
+      {/* ═══ HERO — images left, text bottom-right ═══ */}
+      <section className="px-6 md:px-10 pt-10 md:pt-16 grid grid-cols-12 gap-6 items-center min-h-[70vh]">
+
+        {/* LEFT — overlapping tilted rounded image cards */}
+        <div className="col-span-12 md:col-span-6 relative" style={{ height: "clamp(500px, 68vh, 740px)" }}>
+
+          {/* BOTTOM card — solid moss/dark colour, tilted anti-clockwise */}
+          <div
+            className="absolute"
+            style={{
+              top: "30%",
+              left: "38%",
+              width: "58%",
+              height: "50%",
+              borderRadius: "44% 40% 46% 38% / 40% 46% 38% 44%",
+              transform: "rotate(-8deg)",
+              background: "var(--moss)",
+              zIndex: 1,
+            }}
+          />
+
+          {/* Dot grid — sits on top of solid card, below image, integrated into the overlap */}
+          <div
+            aria-hidden
+            style={{
+              position: "absolute",
+              bottom: "24%",
+              left: "27%",
+              zIndex: 4,
+              pointerEvents: "none",
+            }}
+          >
+            <svg width="550" height="180">
+              {Array.from({ length: 24 }).map((_, row) =>
+                Array.from({ length: 21 }).map((_, col) => (
+                  <circle
+                    key={`${row}-${col}`}
+                    cx={col * 24 + 15}
+                    cy={row * 22 + 15}
+                    r="1.4"
+                    fill="rgba(0, 0, 0, 0.4)"
+                  />
+                ))
+              )}
+            </svg>
+          </div>
+
+          {/* PRIMARY image card — tilted clockwise, overlaps heavily down onto solid card */}
+          <div
+            className="absolute overflow-hidden"
+            style={{
+              top: "4%",
+              left: "20%",
+              width: "70%",
+              height: "62%",
+              borderRadius: "30% 25% 30% 35% / 38% 44% 40% 42%",
+              transform: "rotate(7deg)",
+              zIndex: 5,
+              boxShadow: "0 20px 60px rgba(0,0,0,0.22)",
+            }}
+          >
+            <img
+              src={hero1}
+              alt="Newark Market Place at dusk"
+              loading="lazy"
+              width={1920}
+              height={1080}
+              className="w-full h-full object-cover"
+              style={{ transform: "rotate(-7deg) scale(1.12)", transformOrigin: "center" }}
+            />
+          </div>
+
+        </div>
+
+        {/* RIGHT — text, pushed to bottom-right feel with justify-end */}
+        <div className="col-span-12 md:col-span-5 md:col-start-8 flex flex-col justify-end pb-8 md:pb-16">
+          <p className="eyebrow mb-8">№ 05 — On the house</p>
+          <SplitWords
+            as="h1"
+            stagger={90}
+            className="font-display text-5xl md:text-[5.5vw] leading-[0.95] text-foreground"
+          >
+            Porter & Bridge,
           </SplitWords>
-          <SplitWords as="p" delay={500} stagger={75} className="font-display text-5xl md:text-[6vw] leading-[0.95] font-serif-i text-moss">
-            Held since 1893.
+          <SplitWords
+            as="p"
+            delay={600}
+            stagger={75}
+            className="font-display text-5xl md:text-[5.5vw] leading-[0.95] font-serif-i text-moss mt-1"
+          >
+            Newark.
           </SplitWords>
           <Reveal delay={900}>
-            <p className="mt-10 max-w-[60ch] text-foreground/80 leading-[1.85]">
-              Porter &amp; Bridge Investment Ltd is the freehold owner of a single building on the corner of Bridge Street and Market Place in Newark on Trent. We do not buy and sell. We do not grow a portfolio for its own sake. We tenant the ground floor, plan the upper floors, answer the post.
+            <p className="mt-8 max-w-[44ch] text-foreground/70 leading-[1.85]" style={{ fontSize: "clamp(0.8rem, 0.95vw, 0.9rem)" }}>
+              Porter &amp; Bridge Investment Ltd is the freehold owner of a single building on the corner of Bridge Street and Market Place in Newark on Trent. Tenancies available for both floors, contact for more information.
             </p>
           </Reveal>
         </div>
+
       </section>
 
-      {/* FULL BLEED IMAGE SECTION — fades out at bottom */}
-      <div className="relative mt-24 md:mt-32 h-[80vh] overflow-hidden">
-        <img
-          src={square}
-          alt="Newark on Trent market square at dusk"
-          loading="lazy"
-          width={1920}
-          height={1080}
-          className="w-full h-full object-cover opacity-40"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-transparent to-background" />
-      </div>
-
-      {/* PRINCIPLES — overlaps image via negative margin */}
-      <section className="relative z-10 -mt-32 px-6 md:px-10 grid grid-cols-12 gap-6">
+      {/* ═══ PRINCIPLES ═══ */}
+      <section className="mt-32 md:mt-40 px-6 md:px-10 grid grid-cols-12 gap-6">
         <div className="col-span-12 md:col-span-3">
           <p className="eyebrow">The house, in principle</p>
           <p className="mt-4 font-serif-i text-foreground/70 leading-[1.6] max-w-[26ch]">
@@ -74,7 +145,7 @@ export default function About() {
         </ol>
       </section>
 
-      {/* THE PEOPLE */}
+      {/* ═══ THE PEOPLE ═══ */}
       <section className="mt-40 px-6 md:px-10 grid grid-cols-12 gap-10">
         <Reveal className="col-span-12 md:col-span-5 space-y-7 text-foreground/80 leading-[1.85] max-w-[52ch]">
           <p className="eyebrow text-foreground">The people</p>
@@ -96,34 +167,49 @@ export default function About() {
         </aside>
       </section>
 
-      {/* TIMELINE */}
-      <section className="mt-40 px-6 md:px-10 grid grid-cols-12 gap-6">
-        <p className="col-span-12 md:col-span-3 eyebrow md:pt-3">A short chronology</p>
-        <ol className="col-span-12 md:col-span-9 divide-y divide-border border-y border-foreground/20">
-          {TIMELINE.map(([y, t]) => (
-            <li key={y} className="grid grid-cols-12 gap-6 py-10">
-              <p className="col-span-3 md:col-span-2 font-display text-3xl md:text-5xl text-foreground tabular-nums">{y}</p>
-              <p className="col-span-9 md:col-span-10 max-w-[58ch] text-foreground/80 leading-[1.75]">{t}</p>
-            </li>
-          ))}
-        </ol>
-      </section>
+      {/* ═══ TIMELINE + BYRON — side by side ═══ */}
+      <section className="mt-40 px-6 md:px-10 grid grid-cols-12 gap-10 items-start">
 
-      {/* QUIET PROMISE */}
-      <section className="mt-40 px-6 md:px-10 grid grid-cols-12 gap-10 items-center">
-        <Reveal className="image-reveal col-span-12 md:col-span-5">
-          <img src={hero2} alt="Detail of cast-iron rainwater goods, Bridge Street, Newark" loading="lazy" width={1280} height={1600} className="w-full h-[60vh] object-cover" />
-        </Reveal>
-        <div className="col-span-12 md:col-span-6 md:col-start-7">
-          <SplitWords as="p" stagger={70} className="font-display text-3xl md:text-5xl leading-[1.1] text-foreground max-w-[24ch]">
-            We do not own a museum. We own the rooms in which it happened.
-          </SplitWords>
-          <Reveal delay={400}>
-            <p className="mt-8 font-serif-i text-moss">— Porter &amp; Bridge Investment Ltd</p>
-          </Reveal>
+        {/* TIMELINE — top-left, takes up 7 cols */}
+        <div className="col-span-12 md:col-span-7">
+          <div className="grid grid-cols-12 gap-6 mb-10">
+            <p className="col-span-12 eyebrow">A short chronology</p>
+          </div>
+          <ol className="divide-y divide-border border-t border-foreground/20">
+            {TIMELINE.map(([y, t]) => (
+              <li key={y} className="grid grid-cols-12 gap-6 py-8">
+                <p className="col-span-3 font-display text-3xl md:text-4xl text-foreground tabular-nums leading-none pt-1">{y}</p>
+                <p className="col-span-9 text-foreground/75 leading-[1.75]" style={{ fontSize: "clamp(0.78rem, 0.9vw, 0.88rem)" }}>{t}</p>
+              </li>
+            ))}
+          </ol>
         </div>
+
+        {/* BYRON — bottom-right, 4 cols, aligned to bottom of timeline */}
+        <aside className="col-span-12 md:col-span-4 md:col-start-9 md:pt-16">
+          <div style={{ borderTop: "0.5px solid var(--border)", paddingTop: "1.5rem" }}>
+            <Reveal>
+              <p className="eyebrow mb-6">A footnote in English letters</p>
+              <p
+                className="font-display text-foreground leading-[0.95] mb-6"
+                style={{ fontSize: "clamp(2rem, 3vw, 2.8rem)", fontWeight: 300 }}
+              >
+                Byron's first words
+                <span className="font-serif-i text-moss block mt-1">were printed here.</span>
+              </p>
+              <p className="text-foreground/65 leading-[1.8]" style={{ fontSize: "clamp(0.75rem, 0.85vw, 0.84rem)" }}>
+                In autumn 1806, an eighteen-year-old Lord Byron brought his poems to S.&nbsp;&amp;&nbsp;J. Ridge, printers, on this corner of Newark Market Place. The volume — <em className="font-serif-i">Fugitive Pieces</em> — was his first. He suppressed it almost immediately, ordering all copies burned after a clergyman objected to its frankness. Only four copies survived the flames. A plaque on the façade of G.H. Porter marks the press where it was set.
+              </p>
+              <p className="mt-6 text-foreground/40" style={{ fontSize: "0.68rem", letterSpacing: "0.14em", textTransform: "uppercase", fontFamily: "var(--font-body)" }}>
+                George Gordon, Lord Byron · 1788–1824
+              </p>
+            </Reveal>
+          </div>
+        </aside>
+
       </section>
 
+      {/* ═══ CONTINUE ═══ */}
       <section className="mt-40 px-6 md:px-10 border-t border-border pt-10 pb-32">
         <div className="grid grid-cols-12 items-end gap-6">
           <p className="col-span-12 md:col-span-3 eyebrow">Continue</p>
@@ -135,6 +221,7 @@ export default function About() {
           </Link>
         </div>
       </section>
+
     </Layout>
   );
 }
