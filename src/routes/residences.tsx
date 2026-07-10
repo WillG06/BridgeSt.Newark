@@ -11,6 +11,7 @@ import flat3 from "@/assets/flat-3.jpg";
 import flat4 from "@/assets/flat-4.jpg";
 import flat5 from "@/assets/flat-5.jpg";
 import flat6 from "@/assets/flat-6.jpg";
+import bgDesign from "@/assets/bg-design.jpg";
 
 interface Flat {
   n: string;
@@ -33,8 +34,10 @@ const FLATS: Flat[] = [
   { n: "06", name: "The Square",  type: "1–2 bed · gable end",       sqm: "56 sq m", sqft: "602 sq ft", aspect: "West, full view of the square",     features: ["Triple sash window over Market Place", "Dressing room", "Cast-iron radiators throughout"],      img: flat6 },
 ];
 
-// ── Desktop scatter — hand-placed, avoids the title zone (left 8vw, vertically centred) ──
-// Each image: position (%), size (px), resting rotation, entrance axis, exit axis, delay
+// ── Hero scatter ──
+// Each image: position (%), size (px), resting rotation, entrance axis, exit axis, delay.
+// tapeRotate is independent of `rotate` — it's applied to the tape strip, not the photo,
+// so the tape reads as if it were stuck down separately (see ScatteredImage).
 type HeroImg = {
   src: string; alt: string;
   top: string; left: string;
@@ -42,26 +45,43 @@ type HeroImg = {
   enterFrom: "up" | "down" | "left" | "right";
   exitTo:    "up" | "down" | "left" | "right";
   delay: number;
+  tapeRotate?: number;
 };
 
+// ── Desktop (lg and up, ~1024px+) ──
+// 7 images — an even 4-top/4-bottom split read as two straight lines with
+// almost no height variation between neighbours. This drops one image and
+// staggers each cluster into a zigzag (high–low–high–low) instead, which
+// reads as hand-placed rather than a grid.
 const HERO_IMAGES: HeroImg[] = [
-  { src: flat2, alt: "Flat 02 — fireplace detail",            top: "8%",  left: "4%",  size: 100, rotate: -3, enterFrom: "up",    exitTo: "up",    delay: 0.05 },
-  { src: flat3, alt: "Flat 03 — chimney breast",              top: "5%",  left: "38%", size: 82,  rotate:  2, enterFrom: "down",  exitTo: "left",  delay: 0.20 },
-  { src: flat6, alt: "Flat 06 — triple sash",                 top: "8%",  left: "66%", size: 112, rotate:  4, enterFrom: "right", exitTo: "up",    delay: 0.11 },
-  { src: flat1, alt: "Flat 01 — sash window",                 top: "6%",  left: "86%", size: 86,  rotate: -2, enterFrom: "up",    exitTo: "right", delay: 0.32 },
-  { src: flat5, alt: "Flat 05 — staircase hall",              top: "55%", left: "38%", size: 104, rotate:  3, enterFrom: "left",  exitTo: "down",  delay: 0.17 },
-  { src: flat4, alt: "Flat 04 — antique mirror",              top: "58%", left: "62%", size: 96,  rotate: -4, enterFrom: "down",  exitTo: "down",  delay: 0.38 },
-  { src: flat3, alt: "Flat 03 — brass tap detail",            top: "60%", left: "84%", size: 78,  rotate:  2, enterFrom: "right", exitTo: "left",  delay: 0.09 },
-  { src: flat1, alt: "Flat 01 — golden hour",                 top: "62%", left: "4%",  size: 88,  rotate: -5, enterFrom: "left",  exitTo: "right", delay: 0.26 },
-  { src: flat2, alt: "Flat 02 — cornice detail",              top: "75%", left: "22%", size: 94,  rotate:  4, enterFrom: "down",  exitTo: "up",    delay: 0.44 },
+  { src: flat2, alt: "Flat 02 — fireplace detail", top: "4%",  left: "4%",  size: 150, rotate: -2, enterFrom: "up",    exitTo: "up",    delay: 0.05, tapeRotate: -6 },
+  { src: flat3, alt: "Flat 03 — chimney breast",   top: "13%", left: "28%", size: 128, rotate:  2, enterFrom: "down",  exitTo: "left",  delay: 0.20, tapeRotate:  5 },
+  { src: flat6, alt: "Flat 06 — triple sash",      top: "3%",  left: "54%", size: 165, rotate: -1, enterFrom: "right", exitTo: "up",    delay: 0.11, tapeRotate: -4 },
+  { src: flat1, alt: "Flat 01 — sash window",      top: "12%", left: "80%", size: 132, rotate:  2, enterFrom: "up",    exitTo: "right", delay: 0.32, tapeRotate:  6 },
+  { src: flat5, alt: "Flat 05 — staircase hall",   top: "63%", left: "18%", size: 152, rotate: -2, enterFrom: "left",  exitTo: "down",  delay: 0.17, tapeRotate: -5 },
+  { src: flat4, alt: "Flat 04 — antique mirror",   top: "75%", left: "46%", size: 140, rotate:  2, enterFrom: "down",  exitTo: "down",  delay: 0.38, tapeRotate:  6 },
+  { src: flat1, alt: "Flat 01 — golden hour",      top: "65%", left: "74%", size: 135, rotate: -2, enterFrom: "left",  exitTo: "right", delay: 0.26, tapeRotate:  5 },
 ];
 
-// ── Mobile scatter — fewer, smaller, repositioned so they don't crowd the title ──
+// ── Tablet (md to lg, ~768–1023px) ──
+// Its own tier rather than reusing the desktop set — 5 images only, sized up
+// so the hero doesn't feel cramped, and kept clear of the vertical centre
+// where the title sits.
+const HERO_IMAGES_TABLET: HeroImg[] = [
+  { src: flat2, alt: "Flat 02 — fireplace detail", top: "6%",  left: "4%",  size: 118, rotate: -3, enterFrom: "up",    exitTo: "up",    delay: 0.05, tapeRotate: -6 },
+  { src: flat6, alt: "Flat 06 — triple sash",      top: "5%",  left: "66%", size: 130, rotate:  3, enterFrom: "right", exitTo: "up",    delay: 0.15, tapeRotate:  6 },
+  { src: flat5, alt: "Flat 05 — staircase hall",   top: "68%", left: "36%", size: 120, rotate: -2, enterFrom: "left",  exitTo: "down",  delay: 0.20, tapeRotate: -5 },
+  { src: flat4, alt: "Flat 04 — antique mirror",   top: "70%", left: "64%", size: 108, rotate:  3, enterFrom: "down",  exitTo: "down",  delay: 0.30, tapeRotate:  6 },
+  { src: flat1, alt: "Flat 01 — golden hour",      top: "70%", left: "6%",  size: 112, rotate: -3, enterFrom: "left",  exitTo: "right", delay: 0.10, tapeRotate: -5 },
+];
+
+// ── Mobile (below md) ── unchanged: the chimney-breast shot stays enlarged
+// so it stands out from the rest. No frame/tape at this size — kept clean.
 const HERO_IMAGES_MOBILE: HeroImg[] = [
-  { src: flat1, alt: "Flat 01 — sash window",    top: "18%", left: "4%",  size: 76, rotate: -3, enterFrom: "up",    exitTo: "up",    delay: 0.05 },
-  { src: flat3, alt: "Flat 03 — chimney breast", top: "14%", left: "60%", size: 68, rotate:  3, enterFrom: "down",  exitTo: "right", delay: 0.18 },
-  { src: flat5, alt: "Flat 05 — staircase hall", top: "68%", left: "6%",  size: 72, rotate: -2, enterFrom: "left",  exitTo: "down",  delay: 0.12 },
-  { src: flat4, alt: "Flat 04 — antique mirror", top: "72%", left: "58%", size: 64, rotate:  4, enterFrom: "right", exitTo: "up",    delay: 0.28 },
+  { src: flat1, alt: "Flat 01 — sash window",    top: "18%", left: "4%",  size: 76,  rotate: -3, enterFrom: "up",    exitTo: "up",    delay: 0.05 },
+  { src: flat3, alt: "Flat 03 — chimney breast", top: "12%", left: "56%", size: 108, rotate:  3, enterFrom: "down",  exitTo: "right", delay: 0.18 },
+  { src: flat5, alt: "Flat 05 — staircase hall", top: "68%", left: "6%",  size: 72,  rotate: -2, enterFrom: "left",  exitTo: "down",  delay: 0.12 },
+  { src: flat4, alt: "Flat 04 — antique mirror", top: "72%", left: "58%", size: 64,  rotate:  4, enterFrom: "right", exitTo: "up",    delay: 0.28 },
 ];
 
 const AXIS: Record<HeroImg["enterFrom"] | HeroImg["exitTo"], { x: number; y: number }> = {
@@ -74,12 +94,18 @@ const AXIS: Record<HeroImg["enterFrom"] | HeroImg["exitTo"], { x: number; y: num
 // ── ScatteredImage ──
 // Two motion.div layers so entrance (animate) and exit (style MotionValues)
 // never compete for the same property on the same element.
+// `frame` adds a 4px white border + shadow (like a picture frame) and a
+// strip of "tape" at the top. The tape sits OUTSIDE the rotated inner div,
+// so it keeps its own angle (img.tapeRotate) instead of rotating with the
+// photo — that's what sells the "stuck down separately" look.
 function ScatteredImage({
   img,
   exitProgress,
+  frame = false,
 }: {
   img: HeroImg;
   exitProgress: ReturnType<typeof useScroll>["scrollYProgress"];
+  frame?: boolean;
 }) {
   const enter = AXIS[img.enterFrom];
   const exit  = AXIS[img.exitTo];
@@ -105,9 +131,17 @@ function ScatteredImage({
         zIndex: 1, // behind the z-20 title
       }}
     >
-      {/* Inner: load-triggered entrance */}
+      {/* Inner: load-triggered entrance + the "picture frame" treatment */}
       <motion.div
-        style={{ width: "100%", height: "100%", rotate: img.rotate }}
+        style={{
+          width: "100%",
+          height: "100%",
+          position: "relative",
+          rotate: img.rotate,
+          padding: frame ? 4 : 0,
+          background: frame ? "#fdfcf9" : "transparent",
+          boxShadow: frame ? "0 14px 30px -12px rgba(26,22,18,0.32)" : "none",
+        }}
         initial={{ x: enter.x, y: enter.y, opacity: 0, scale: 0.86 }}
         animate={{ x: 0,       y: 0,       opacity: 1, scale: 1    }}
         transition={{ duration: 0.9, delay: img.delay, ease: [0.16, 1, 0.3, 1] }}
@@ -120,12 +154,32 @@ function ScatteredImage({
           className="h-full w-full object-cover"
           style={{ filter: "saturate(1.02) contrast(1.03)" }}
         />
-        {/* hairline inset frame */}
+        {/* hairline inset frame, sits just inside the white border */}
         <div
-          className="pointer-events-none absolute inset-0"
-          style={{ boxShadow: "inset 0 0 0 0.5px rgba(26,22,18,0.18)" }}
+          className="pointer-events-none"
+          style={{
+            position: "absolute",
+            top: frame ? 4 : 0, left: frame ? 4 : 0, right: frame ? 4 : 0, bottom: frame ? 4 : 0,
+            boxShadow: "inset 0 0 0 0.5px rgba(26,22,18,0.18)",
+          }}
         />
       </motion.div>
+
+      {/* Tape — independent angle, painted after the photo so it sits on top */}
+      {frame && (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute left-1/2"
+          style={{
+            top: -10,
+            width: "42%",
+            height: 20,
+            transform: `translateX(-50%) rotate(${img.tapeRotate ?? 0}deg)`,
+            background: "linear-gradient(180deg, rgba(250,246,235,0.92), rgba(232,223,203,0.78))",
+            boxShadow: "0 2px 5px rgba(26,22,18,0.18)",
+          }}
+        />
+      )}
     </motion.div>
   );
 }
@@ -154,6 +208,21 @@ export default function Residences() {
           className="sticky top-0 h-screen w-full overflow-hidden bg-background"
           style={{ willChange: "transform" }}
         >
+          {/* Full-bleed background image — sits behind everything else in the
+              hero. Header lives outside this component in Layout, so it's
+              unaffected. Opacity knocked back to 75% so it reads as a soft
+              backdrop rather than competing with the title / photos —
+              adjust the 0.75 below (try 0.7–0.8) to taste. */}
+          <div className="absolute inset-0" style={{ zIndex: 0 }}>
+            <img
+              src={bgDesign}
+              alt=""
+              aria-hidden="true"
+              className="h-full w-full object-cover"
+              style={{ opacity: 0.35 }}
+            />
+          </div>
+
           {/* Measure bar */}
           <div className="relative z-30 flex items-center gap-4 px-6 md:px-10 pt-10 md:pt-14">
             <span className="eyebrow text-foreground/35 whitespace-nowrap">№ 03 — The upper floors</span>
@@ -167,18 +236,31 @@ export default function Residences() {
           {/* Scattered images — z-index 1, behind everything else */}
           <div className="absolute inset-0" style={{ zIndex: 1 }}>
 
-            {/* Desktop images */}
-            <div className="hidden md:block absolute inset-0">
+            {/* Desktop images — lg and up */}
+            <div className="hidden lg:block absolute inset-0">
               {HERO_IMAGES.map((img, i) => (
                 <ScatteredImage
                   key={`d-${i}`}
                   img={img}
                   exitProgress={scrollYProgress}
+                  frame
                 />
               ))}
             </div>
 
-            {/* Mobile images */}
+            {/* Tablet images — md up to lg */}
+            <div className="hidden md:block lg:hidden absolute inset-0">
+              {HERO_IMAGES_TABLET.map((img, i) => (
+                <ScatteredImage
+                  key={`t-${i}`}
+                  img={img}
+                  exitProgress={scrollYProgress}
+                  frame
+                />
+              ))}
+            </div>
+
+            {/* Mobile images — below md */}
             <div className="block md:hidden absolute inset-0">
               {HERO_IMAGES_MOBILE.map((img, i) => (
                 <ScatteredImage

@@ -248,10 +248,10 @@ export default function Home() {
               preserveAspectRatio="xMidYMid meet"
               style={{ pointerEvents: "none", zIndex: 0 }}
             >
-              {/* Bottom-left — bleeds off left edge, sits in lower white space below body text */}
-              <circle cx="-2" cy="85" r="26" fill="none" stroke="rgba(26,22,18,0.13)" strokeWidth="0.2" />
-              <circle cx="-2" cy="85" r="16" fill="none" stroke="rgba(26,22,18,0.10)" strokeWidth="0.18" />
-              <circle cx="-2" cy="85" r="8" fill="none" stroke="rgba(192,57,43,0.22)" strokeWidth="0.18" />
+              {/* Left — bleeds off the left edge, sits below the body copy column, clear of the text */}
+              <circle cx="-24" cy="74" r="48" fill="none" stroke="rgba(26,22,18,0.16)" strokeWidth="0.12" />
+              <circle cx="-24" cy="74" r="34" fill="none" stroke="rgba(26,22,18,0.13)" strokeWidth="0.12" />
+              <circle cx="-24" cy="74" r="18" fill="none" stroke="rgba(192,57,43,0.30)" strokeWidth="0.12" />
               {/* Top-right — bleeds off right edge, in the empty margin above the aside */}
               <circle cx="102" cy="10" r="22" fill="none" stroke="rgba(26,22,18,0.10)" strokeWidth="0.18" />
               <circle cx="102" cy="10" r="12" fill="none" stroke="rgba(26,22,18,0.07)" strokeWidth="0.15" />
